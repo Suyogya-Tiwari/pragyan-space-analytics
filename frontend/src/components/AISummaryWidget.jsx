@@ -19,7 +19,7 @@ const AISummaryWidget = ({ chartData, config, title }) => {
     
     setSummary("Generating AI Insight...");
     try {
-      const response = await fetch("http://localhost:8001/api/generate_summary", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/generate_summary`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: `Provide an insight for ${title}`, chartData, config })

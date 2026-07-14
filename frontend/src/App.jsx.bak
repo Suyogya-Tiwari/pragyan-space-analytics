@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, startTransition, useRef } from 'react';
+﻿import { useState, useEffect, useMemo, startTransition, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Rocket, Satellite, Activity, Globe, List, BarChart3, FilterX, X, LayoutDashboard, Orbit } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, BarChart, Bar, AreaChart, Area, Cell, ComposedChart, Treemap, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, PieChart, Pie } from 'recharts';
@@ -13,10 +13,9 @@ import RocketGarage from './components/RocketGarage';
 import LiveOrbitalMap from './components/LiveOrbitalMap';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import SplashScreen from './components/SplashScreen';
-import AISummaryWidget from './components/AISummaryWidget';
 
 const EqualizerIcon = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={className}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
     <rect x="2" y="14" width="4" height="6" className="fill-cyan-500/20 stroke-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.8)]" />
     <rect x="8" y="10" width="4" height="10" className="fill-cyan-500/20 stroke-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.8)]" />
     <rect x="14" y="4" width="4" height="16" className="fill-cyan-500/20 stroke-cyan-400 drop-shadow-[0_0_6px_rgba(34,211,238,0.8)]" />
@@ -25,11 +24,11 @@ const EqualizerIcon = ({ className }) => (
 );
 
 const NetworkNodesIcon = ({ className }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className={className}>
-    <path d="M11 7L7.5 15 M13 7L16.5 15 M8 18L16 18" className="stroke-fuchsia-600/50" />
-    <circle cx="12" cy="5" r="2.5" className="fill-fuchsia-600/20 stroke-fuchsia-500 drop-shadow-[0_0_6px_rgba(217,70,239,0.8)]" />
-    <circle cx="6" cy="18" r="2.5" className="fill-fuchsia-600/20 stroke-fuchsia-500 drop-shadow-[0_0_6px_rgba(217,70,239,0.8)]" />
-    <circle cx="18" cy="18" r="2.5" className="fill-fuchsia-600/20 stroke-fuchsia-500 drop-shadow-[0_0_6px_rgba(217,70,239,0.8)]" />
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M11 7L7.5 15 M13 7L16.5 15 M8 18L16 18" className="stroke-orange-500/50" />
+    <circle cx="12" cy="5" r="2.5" className="fill-orange-500/20 stroke-orange-400 drop-shadow-[0_0_6px_rgba(251,146,60,0.8)]" />
+    <circle cx="6" cy="18" r="2.5" className="fill-orange-500/20 stroke-orange-400 drop-shadow-[0_0_6px_rgba(251,146,60,0.8)]" />
+    <circle cx="18" cy="18" r="2.5" className="fill-orange-500/20 stroke-orange-400 drop-shadow-[0_0_6px_rgba(251,146,60,0.8)]" />
   </svg>
 );
 
@@ -57,12 +56,10 @@ const STATE_PALETTES = {
 
 const CustomMainTooltip = ({ active, payload, label }) => {
   if (active && payload && payload.length) {
-    const sortedPayload = [...payload]
-      .filter(entry => entry.value !== 0 && entry.value !== null)
-      .sort((a, b) => {
-        if (a.value && b.value) return b.value - a.value;
-        return 0;
-      });
+    const sortedPayload = [...payload].sort((a, b) => {
+      if (a.value && b.value) return b.value - a.value;
+      return 0;
+    });
     return (
       <div className="glass-card p-4 border border-space-600/50">
         <p className="text-white font-bold mb-2">{payload[0].payload.fullName || label || payload[0].name}</p>
@@ -140,12 +137,11 @@ export default function App() {
 
   // Space Command
   const [commandConfig, setCommandConfig] = useState(null);
-  const [commandQuery, setCommandQuery] = useState("");
 
   const decades = [
     { label: 'All Time', value: null },
     { label: '1950s', value: { start: 1950, end: 1959 } },
-    { label: '1960s', value: { start: 1960, end: 1969 } },
+    { label: '1960s (Space Race)', value: { start: 1960, end: 1969 } },
     { label: '1970s', value: { start: 1970, end: 1979 } },
     { label: '1980s', value: { start: 1980, end: 1989 } },
     { label: '1990s', value: { start: 1990, end: 1999 } },
@@ -168,11 +164,11 @@ export default function App() {
 
     const executeFetch = () => {
       Promise.all([
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/launches${qs}`).then(res => res.json()),
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/timeline${qs}`).then(res => res.json()),
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/rockets${qs}`).then(res => res.json()),
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/success_over_time${qs}`).then(res => res.json()),
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/all_data`).then(res => res.json())
+        fetch(`http://localhost:8001/api/launches${qs}`).then(res => res.json()),
+        fetch(`http://localhost:8001/api/timeline${qs}`).then(res => res.json()),
+        fetch(`http://localhost:8001/api/rockets${qs}`).then(res => res.json()),
+        fetch(`http://localhost:8001/api/success_over_time${qs}`).then(res => res.json()),
+        fetch(`http://localhost:8001/api/all_data${qs}`).then(res => res.json())
       ]).then(([lData, tData, rData, sData, all]) => {
         setLaunches(lData);
         setRockets(rData);
@@ -208,26 +204,9 @@ export default function App() {
     }
   }, [selectedAgency, selectedDecade]);
 
-  const handleSpaceCommand = (config, query) => {
+  const handleSpaceCommand = (config) => {
     setCommandConfig(config);
-    setCommandQuery(query);
     setViewMode('builder');
-  };
-
-  const handleTabSwitch = (mode) => {
-    // Clear all lifted states so every tab starts fresh
-    setSelectedAgency(null);
-    setSelectedDecade(null);
-    setCommandConfig(null);
-    setCommandQuery("");
-    
-    // Reset HTML selects if they are visible
-    const decadeSelect = document.getElementById('decade-select');
-    const agencySelect = document.getElementById('agency-select');
-    if (decadeSelect) decadeSelect.value = 0;
-    if (agencySelect) agencySelect.value = "";
-    
-    setViewMode(mode);
   };
 
   const totalLaunches = launches.reduce((acc, curr) => acc + curr.total_launches, 0);
@@ -237,8 +216,8 @@ export default function App() {
 
 
   // --- NEW CINEMATIC DATA COMPUTATIONS ---
-  const { treeMapData, divergingFleetData, radarData, ecoSunburstState, ecoSunburstAgency, ecoSunburstRocket, ganttData, outcomeBarData, bumpChartData } = useMemo(() => {
-    if (!allData || allData.length === 0) return { treeMapData: [], divergingFleetData: [], radarData: [], ecoSunburstState: [], ecoSunburstAgency: [], ecoSunburstRocket: [], ganttData: [], outcomeBarData: [], bumpChartData: [] };
+  const { treeMapData, maidenFlightsData, divergingFleetData, radarData, ecoSunburstState, ecoSunburstAgency, ecoSunburstRocket, ganttData, outcomeBarData, bumpChartData } = useMemo(() => {
+    if (!allData || allData.length === 0) return { treeMapData: [], maidenFlightsData: [], divergingFleetData: [], radarData: [], ecoSunburstState: [], ecoSunburstAgency: [], ecoSunburstRocket: [], ganttData: [], outcomeBarData: [], bumpChartData: [] };
     
     // 1. TreeMap (Geopolitical Monopoly)
     const COUNTRY_NAMES = {
@@ -497,81 +476,46 @@ export default function App() {
       {!splashFinished && <SplashScreen isLoaded={!loading} onComplete={() => setSplashFinished(true)} />}
 
       {/* Header */}
-      <header className="mb-8 flex items-center justify-between gap-6 overflow-x-auto custom-scrollbar pb-2">
-        <div className="shrink-0">
-          <h1 className="text-3xl font-bold font-display text-white tracking-tight whitespace-nowrap">Pragyan | प्रज्ञान</h1>
-          <p className="text-space-400 mt-1 whitespace-nowrap text-sm">Orbital Launch Database & Analytics</p>
+      <header className="mb-8 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl md:text-4xl font-bold font-display text-white tracking-tight">Pragyan | αñ¬αÑìαñ░αñ£αÑìαñ₧αñ╛αñ¿</h1>
+          <p className="text-space-400 mt-1">Orbital Launch Database & Analytics</p>
         </div>
-        
-        <div className="flex items-center gap-4 shrink-0">
-          
-          {/* Controls: Search and Filters */}
-          <div className="flex items-center gap-3">
-            <SpaceCommand onCommand={handleSpaceCommand} allData={allData} />
-            
-            {viewMode === 'dashboard' && (
-              <>
-                <select 
-                  id="agency-select"
-                  value={selectedAgency || ""}
-                  className="glass-panel text-white text-sm rounded-lg focus:ring-agency-spacex focus:border-agency-spacex block p-2.5 outline-none"
-                  onChange={(e) => setSelectedAgency(e.target.value === "" ? null : e.target.value)}
-                >
-                  <option value="">All Agencies</option>
-                  <option value="SpaceX">SpaceX</option>
-                  <option value="NASA">NASA</option>
-                  <option value="Roscosmos">Roscosmos</option>
-                  <option value="CNSA">CNSA (China)</option>
-                  <option value="ISRO">ISRO (India)</option>
-                  <option value="ESA">ESA</option>
-                  <option value="Arianespace">Arianespace</option>
-                  <option value="ULA">ULA</option>
-                  <option value="Rocket Lab">Rocket Lab</option>
-                  <option value="JAXA">JAXA (Japan)</option>
-                </select>
+        <div className="flex flex-wrap items-center gap-3">
+          <select 
+            className="glass-panel text-white text-sm rounded-lg focus:ring-agency-nasa focus:border-agency-nasa block p-2.5 outline-none"
+            onChange={(e) => setSelectedDecade(decades[e.target.value].value)}
+          >
+            {decades.map((dec, idx) => <option key={idx} value={idx}>{dec.label}</option>)}
+          </select>
 
-                <select 
-                  id="decade-select"
-                  className="glass-panel text-white text-sm rounded-lg focus:ring-agency-nasa focus:border-agency-nasa block p-2.5 outline-none"
-                  onChange={(e) => setSelectedDecade(decades[e.target.value].value)}
-                >
-                  {decades.map((dec, idx) => <option key={idx} value={idx}>{dec.label}</option>)}
-                </select>
-
-                {(selectedAgency || selectedDecade) && (
-                  <button 
-                    onClick={() => { 
-                      setSelectedAgency(null); 
-                      setSelectedDecade(null); 
-                      document.getElementById('decade-select').value=0; 
-                      document.getElementById('agency-select').value=""; 
-                    }}
-                    className="flex items-center gap-2 px-3 py-2 bg-space-500/10 text-space-300 hover:bg-space-500/20 border border-space-500/20 rounded-lg text-sm transition-colors"
-                  >
-                    <FilterX className="w-4 h-4" /> Clear
-                  </button>
-                )}
-              </>
-            )}
-          </div>
+          {(selectedAgency || selectedDecade) && (
+            <button 
+              onClick={() => { setSelectedAgency(null); setSelectedDecade(null); document.querySelector('select').value=0; }}
+              className="flex items-center gap-2 px-3 py-2 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 border border-rose-500/20 rounded-lg text-sm transition-colors"
+            >
+              <FilterX className="w-4 h-4" /> Clear
+            </button>
+          )}
 
           {/* View Toggles */}
-          <div className="flex items-center glass-panel p-1 border border-space-600 shrink-0">
-            <button onClick={() => handleTabSwitch('dashboard')} className={`flex items-center whitespace-nowrap gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'dashboard' ? 'bg-agency-nasa/20 text-agency-nasa border border-agency-nasa/30' : 'text-space-400 hover:text-white'}`}><Globe className="w-4 h-4" /> Overview</button>
-            <button onClick={() => handleTabSwitch('orbit')} className={`flex items-center whitespace-nowrap gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'orbit' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-space-400 hover:text-white'}`}><Orbit className="w-4 h-4" /> Live Orbit</button>
-            <button onClick={() => handleTabSwitch('presets')} className={`flex items-center whitespace-nowrap gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'presets' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'text-space-400 hover:text-white'}`}><LayoutDashboard className="w-4 h-4" /> Curated</button>
-            <button onClick={() => handleTabSwitch('builder')} className={`flex items-center whitespace-nowrap gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'builder' ? 'bg-[#00FFFF]/20 text-[#00FFFF] border border-[#00FFFF]/30' : 'text-space-400 hover:text-white'}`}><BarChart3 className="w-4 h-4" /> Sandbox</button>
-            <button onClick={() => handleTabSwitch('garage')} className={`flex items-center whitespace-nowrap gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'garage' ? 'bg-[#FF00FF]/20 text-[#FF00FF] border border-[#FF00FF]/30' : 'text-space-400 hover:text-white'}`}><Rocket className="w-4 h-4" /> Garage</button>
-            <button onClick={() => handleTabSwitch('table')} className={`flex items-center whitespace-nowrap gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'table' ? 'bg-space-300/20 text-space-300 border border-space-300/30' : 'text-space-400 hover:text-white'}`}><List className="w-4 h-4" /> Raw Data</button>
+          <div className="flex glass-panel p-1">
+            <button onClick={() => setViewMode('dashboard')} className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'dashboard' ? 'bg-agency-nasa/20 text-agency-nasa border border-agency-nasa/30' : 'text-space-400 hover:text-white'}`}><Globe className="w-4 h-4" /> Overview</button>
+            <button onClick={() => setViewMode('orbit')} className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'orbit' ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' : 'text-space-400 hover:text-white'}`}><Orbit className="w-4 h-4" /> Live Orbit</button>
+            <button onClick={() => setViewMode('presets')} className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'presets' ? 'bg-agency-spacex/20 text-agency-spacex border border-agency-spacex/30' : 'text-space-400 hover:text-white'}`}><LayoutDashboard className="w-4 h-4" /> Curated</button>
+            <button onClick={() => setViewMode('builder')} className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'builder' ? 'bg-space-600 text-white' : 'text-space-400 hover:text-white'}`}><BarChart3 className="w-4 h-4" /> Sandbox</button>
+            <button onClick={() => setViewMode('garage')} className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'garage' ? 'bg-agency-nasa/20 text-agency-nasa border border-agency-nasa/30' : 'text-space-400 hover:text-white'}`}><Rocket className="w-4 h-4" /> Garage</button>
+            <button onClick={() => setViewMode('table')} className={`flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors ${viewMode === 'table' ? 'bg-space-600 text-white' : 'text-space-400 hover:text-white'}`}><List className="w-4 h-4" /> Raw Data</button>
           </div>
             
+          <SpaceCommand onCommand={handleSpaceCommand} allData={allData} />
         </div>
       </header>
 
       {/* Metrics (Minimalist Large KPI Layout) */}
       <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <motion.div variants={itemVariants}><MetricCard title="Total Launches" value={loading ? "..." : totalLaunches.toLocaleString()} icon={EqualizerIcon} color="text-cyan-400" /></motion.div>
-        <motion.div variants={itemVariants}><MetricCard title={selectedAgency ? "Selected Agency" : "Active Agencies"} value={loading ? "..." : (selectedAgency ? selectedAgency : uniqueAgenciesCount)} icon={NetworkNodesIcon} color="text-fuchsia-500" /></motion.div>
+        <motion.div variants={itemVariants}><MetricCard title={selectedAgency ? "Selected Agency" : "Active Agencies"} value={loading ? "..." : (selectedAgency ? selectedAgency : uniqueAgenciesCount)} icon={NetworkNodesIcon} color="text-orange-400" /></motion.div>
         <motion.div variants={itemVariants}><MetricCard title="Success Rate" value={loading ? "..." : `${successRate}%`} icon={Activity} color="text-agency-isro" /></motion.div>
       </motion.div>
 
@@ -580,10 +524,7 @@ export default function App() {
         
         {viewMode === 'table' && (
           <motion.div key="table" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}>
-            <ErrorBoundary>
-              <DataTable data={allData} loading={loading} />
-            </ErrorBoundary>
-
+            <DataTable data={allData} loading={loading} />
           </motion.div>
         )}
 
@@ -597,28 +538,19 @@ export default function App() {
 
         {viewMode === 'builder' && (
           <motion.div key="builder" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}>
-            <ErrorBoundary>
-              <ChartBuilder allData={allData} initialConfig={commandConfig} query={commandQuery} />
-            </ErrorBoundary>
-
+            <ChartBuilder allData={allData} loading={loading} commandConfig={commandConfig} />
           </motion.div>
         )}
 
         {viewMode === 'garage' && (
           <motion.div key="garage" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}>
-            <ErrorBoundary>
-              <RocketGarage allData={allData} />
-            </ErrorBoundary>
-
+            <RocketGarage allData={allData} />
           </motion.div>
         )}
 
         {viewMode === 'orbit' && (
           <motion.div key="orbit" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}>
-            <ErrorBoundary>
-              <LiveOrbitalMap allData={allData} onClose={() => setViewMode('dashboard')} />
-            </ErrorBoundary>
-
+            <LiveOrbitalMap allData={allData} onClose={() => setViewMode('dashboard')} />
           </motion.div>
         )}
 
@@ -630,10 +562,9 @@ export default function App() {
             </div>
 
             {/* Row 1 */}
-            <motion.div variants={itemVariants} className="col-span-1 xl:col-span-12 glass-card p-4 h-[600px] flex flex-col">
-              <div className="flex justify-between items-center w-full mb-8">
+            <motion.div variants={itemVariants} className="col-span-1 xl:col-span-8 glass-card p-4 h-[600px] flex flex-col">
+              <div className="flex justify-between items-center mb-8">
                 <h2 className="text-3xl font-display font-semibold text-white tracking-tight">Launches Over Time</h2>
-                <AISummaryWidget title="Launches Over Time" chartData={timeline} config={{chartType: 'LineChart'}} />
               </div>
 
               <div className="flex-1 w-full">
@@ -669,49 +600,14 @@ export default function App() {
                 {loading || !splashFinished ? <LoadingPlaceholder /> : <HistoricalTimeline AGENCY_COLORS={AGENCY_COLORS} />}
               </div>
             </motion.div>
-            {/* Row 2 */}
-            {/* 4. Streamgraph */}
-              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-12 glass-card p-4 h-[400px] flex flex-col">
-                <div className="flex justify-between items-start w-full mb-2">
-                  <h2 className="text-xl font-display font-semibold text-white">Decade-by-Decade Dominance</h2>
-                  <AISummaryWidget title="Decade-by-Decade Dominance" chartData={timeline} config={{chartType: 'AreaChart'}} />
-                </div>
-                <p className="text-sm text-space-400 mb-6">Historical launch volume shaped as a geopolitical streamgraph</p>
-                <div className="flex-1 w-full h-[350px]">
-                  {loading ? <LoadingPlaceholder /> : (
-                    <ResponsiveContainer width="100%" height="100%">
-                      <AreaChart data={timeline} margin={{ top: 20, right: 30, left: 0, bottom: 0 }} stackOffset="silhouette">
-                        <CartesianGrid strokeDasharray="3 3" stroke="#363A40" vertical={false} />
-                        <XAxis dataKey="year" stroke="#94A3B8" />
-                        <YAxis hide />
-                        <RechartsTooltip content={<CustomMainTooltip />} cursor={{ stroke: '#fff', strokeWidth: 1, strokeOpacity: 0.2 }} />
-                        <Legend />
-                        {Object.entries(AGENCY_COLORS).map(([agency, color]) => (
-                           <Area key={agency} type="monotone" dataKey={agency} stackId="1" stroke={color} fill={color} fillOpacity={0.8} />
-                        ))}
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  )}
-                </div>
-              </motion.div>
-            
 
-            <motion.div variants={itemVariants} className="col-span-1 xl:col-span-6 glass-card p-4 h-[400px] flex flex-col">
-              <div className="flex justify-between items-start mb-2">
-                <h2 className="text-xl font-display font-semibold text-white">Global Launch Footprint</h2>
-                <AISummaryWidget title="Global Launch Footprint" chartData={{ summary: `Total Launches: ${allData?.length}, Agencies: ${uniqueAgenciesCount}` }} config={{chartType: 'GeoMap', note: 'Summarize global presence based on total volume.'}} />
-              </div>
-              <div className="flex-1 w-full h-[350px]">
-                {loading || !splashFinished ? <LoadingPlaceholder /> : <GeoMap allData={allData} loading={loading} />}
-              </div>
+            <motion.div variants={itemVariants} className="col-span-1 xl:col-span-4 glass-card p-4 h-[600px] flex flex-col">
+              {loading || !splashFinished ? <LoadingPlaceholder /> : <GeoMap allData={allData} loading={loading} />}
             </motion.div>
 
             {/* Row 2 */}
-            <motion.div variants={itemVariants} className="col-span-1 xl:col-span-6 glass-card p-4 h-[400px] flex flex-col">
-              <div className="flex justify-between items-start mb-2">
-                <h2 className="text-xl font-display font-semibold text-white">Success vs Failure Volume</h2>
-                <AISummaryWidget chartData={successTimeline} config={{chartType: 'AreaChart'}} title="Success vs Failure Volume" />
-              </div>
+            <motion.div variants={itemVariants} className="col-span-1 xl:col-span-4 glass-card p-4 h-[400px] flex flex-col">
+              <h2 className="text-xl font-display font-semibold text-white mb-2">Success vs Failure Volume</h2>
                 <div className="flex-1 w-full h-[350px]">
                   {loading || !splashFinished ? <LoadingPlaceholder /> : (
                     <ResponsiveContainer width="100%" height="100%">
@@ -729,11 +625,8 @@ export default function App() {
                 </div>
               </motion.div>
 
-            <motion.div variants={itemVariants} className="col-span-1 xl:col-span-6 glass-card p-4 h-[400px] flex flex-col">
-              <div className="flex justify-between items-start mb-2">
-                <h2 className="text-xl font-display font-semibold text-white">Top 10 Rocket Workhorses</h2>
-                <AISummaryWidget chartData={rockets} config={{chartType: 'ComposedChart'}} title="Top 10 Rocket Workhorses" />
-              </div>
+            <motion.div variants={itemVariants} className="col-span-1 xl:col-span-4 glass-card p-4 h-[400px] flex flex-col">
+              <h2 className="text-xl font-display font-semibold text-white mb-2">Top 10 Rocket Workhorses</h2>
                 <div className="flex-1 w-full h-[350px]">
                   {loading || !splashFinished ? <LoadingPlaceholder /> : (
                     <ResponsiveContainer width="100%" height="100%">
@@ -754,45 +647,58 @@ export default function App() {
                 </div>
               </motion.div>
 
-              
-              
-              {/* 7. Outcome Matrix (100% Stacked Bar) */}
-              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-6 glass-card p-4 h-[400px] flex flex-col">
-                <div className="flex justify-between items-start mb-6">
-                  <div>
-                    <h2 className="text-xl font-display font-semibold text-white mb-2">Outcome Matrix</h2>
-                    <p className="text-sm text-space-400">Normalized 100% success rate comparison</p>
-                  </div>
-                  <AISummaryWidget chartData={outcomeBarData} config={{chartType: 'StackedBar100'}} title="Outcome Matrix" />
-                </div>
+              {/* 2. Maiden Flights Scatter */}
+              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-4 glass-card p-4 h-[400px] flex flex-col">
+                <h2 className="text-xl font-display font-semibold text-white mb-2">Maiden Flight Reliability</h2>
+                <p className="text-sm text-space-400 mb-6">Success or failure on a rocket family's very first launch</p>
                 <div className="flex-1 w-full h-[350px]">
                   {loading ? <LoadingPlaceholder /> : (
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={outcomeBarData} layout="vertical" margin={{ top: 20, right: 30, left: 120, bottom: 20 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" horizontal={true} vertical={false} />
-                        <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} stroke="#94A3B8" />
-                        <YAxis type="category" dataKey="agency" stroke="#94A3B8" width={80} />
-                        <RechartsTooltip content={<CustomOutcomeTooltip />} cursor={{ fill: '#1E293B', opacity: 0.4 }} />
+                      <BarChart data={maidenFlightsData} margin={{ top: 20, right: 20, bottom: 20, left: -20 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#363A40" vertical={false} />
+                        <XAxis dataKey="agency" stroke="#94A3B8" />
+                        <YAxis stroke="#94A3B8" />
+                        <RechartsTooltip 
+                          cursor={{fill: '#2A3052', fillOpacity: 0.2}}
+                          content={({ active, payload }) => {
+                            if (active && payload && payload.length) {
+                              const data = payload[0].payload;
+                              return (
+                                <div className="bg-space-900 border border-space-600 p-4 rounded-xl shadow-2xl z-50">
+                                  <p className="text-white font-bold mb-2 border-b border-space-600/50 pb-2">{data.agency} Maiden Flights</p>
+                                  <div className="flex items-center justify-between gap-4 mb-1">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-3 h-3 rounded-sm bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+                                      <span className="text-space-300">Success</span>
+                                    </div>
+                                    <span className="text-emerald-400 font-bold">{data.success}</span>
+                                  </div>
+                                  <div className="flex items-center justify-between gap-4">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-3 h-3 rounded-sm bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]"></div>
+                                      <span className="text-space-300">Failure</span>
+                                    </div>
+                                    <span className="text-rose-400 font-bold">{data.failure}</span>
+                                  </div>
+                                </div>
+                              );
+                            }
+                            return null;
+                          }}
+                        />
                         <Legend wrapperStyle={{ paddingTop: '10px' }} />
-                        <Bar dataKey="Success" stackId="a" fill="#10B981" radius={[0, 0, 0, 0]} />
-                        <Bar dataKey="Partial" stackId="a" fill="#F59E0B" radius={[0, 0, 0, 0]} />
-                        <Bar dataKey="Failure" stackId="a" fill="#EF4444" radius={[0, 0, 0, 0]} />
-                        <Bar dataKey="Unknown" stackId="a" fill="#64748B" radius={[0, 4, 4, 0]} />
+                        <Bar dataKey="success" name="Successful First Launch" stackId="a" fill="#10B981" radius={[0, 0, 4, 4]} />
+                        <Bar dataKey="failure" name="Failed First Launch" stackId="a" fill="#F43F5E" radius={[4, 4, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   )}
                 </div>
               </motion.div>
-
+              
               {/* 1. Global Monopoly TreeMap */}
               <motion.div variants={itemVariants} className="col-span-1 xl:col-span-6 glass-card p-4 h-[400px] flex flex-col">
-                <div className="flex justify-between items-start mb-6">
-                  <div>
-                    <h2 className="text-xl font-display font-semibold text-white mb-2">The Global Monopoly</h2>
-                    <p className="text-sm text-space-400">Market share visualized by nation and sub-agency</p>
-                  </div>
-                  <AISummaryWidget chartData={treeMapData} config={{chartType: 'Treemap'}} title="The Global Monopoly" />
-                </div>
+                <h2 className="text-xl font-display font-semibold text-white mb-2">The Global Monopoly</h2>
+                <p className="text-sm text-space-400 mb-6">Market share visualized by nation and sub-agency</p>
                 <div className="flex-1 w-full h-[400px]">
                   {loading ? <LoadingPlaceholder /> : (
                     <ResponsiveContainer width="100%" height="100%">
@@ -849,14 +755,54 @@ export default function App() {
                 </div>
               </motion.div>
 
-              
+              {/* 7. Outcome Matrix (100% Stacked Bar) */}
+              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-6 glass-card p-4 h-[400px] flex flex-col">
+                <h2 className="text-xl font-display font-semibold text-white mb-2">Outcome Matrix</h2>
+                <p className="text-sm text-space-400 mb-6">Normalized 100% success rate comparison</p>
+                <div className="flex-1 w-full h-[350px]">
+                  {loading ? <LoadingPlaceholder /> : (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={outcomeBarData} layout="vertical" margin={{ top: 20, right: 30, left: 120, bottom: 20 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#334155" horizontal={true} vertical={false} />
+                        <XAxis type="number" domain={[0, 100]} tickFormatter={(v) => `${v}%`} stroke="#94A3B8" />
+                        <YAxis type="category" dataKey="agency" stroke="#94A3B8" width={80} />
+                        <RechartsTooltip content={<CustomOutcomeTooltip />} cursor={{ fill: '#1E293B', opacity: 0.4 }} />
+                        <Legend wrapperStyle={{ paddingTop: '10px' }} />
+                        <Bar dataKey="Success" stackId="a" fill="#10B981" radius={[0, 0, 0, 0]} />
+                        <Bar dataKey="Partial" stackId="a" fill="#F59E0B" radius={[0, 0, 0, 0]} />
+                        <Bar dataKey="Failure" stackId="a" fill="#EF4444" radius={[0, 0, 0, 0]} />
+                        <Bar dataKey="Unknown" stackId="a" fill="#64748B" radius={[0, 4, 4, 0]} />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  )}
+                </div>
+              </motion.div>
+
+              {/* 4. Streamgraph */}
+              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-8 glass-card p-4 h-[400px] flex flex-col">
+                <h2 className="text-xl font-display font-semibold text-white mb-2">Decade-by-Decade Dominance</h2>
+                <p className="text-sm text-space-400 mb-6">Historical launch volume shaped as a geopolitical streamgraph</p>
+                <div className="flex-1 w-full h-[350px]">
+                  {loading ? <LoadingPlaceholder /> : (
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={timeline} margin={{ top: 20, right: 30, left: 0, bottom: 0 }} stackOffset="silhouette">
+                        <CartesianGrid strokeDasharray="3 3" stroke="#363A40" vertical={false} />
+                        <XAxis dataKey="year" stroke="#94A3B8" />
+                        <YAxis hide />
+                        <RechartsTooltip content={<CustomMainTooltip />} cursor={{ stroke: '#fff', strokeWidth: 1, strokeOpacity: 0.2 }} />
+                        <Legend />
+                        {Object.entries(AGENCY_COLORS).map(([agency, color]) => (
+                           <Area key={agency} type="monotone" dataKey={agency} stackId="1" stroke={color} fill={color} fillOpacity={0.8} />
+                        ))}
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  )}
+                </div>
+              </motion.div>
 
               {/* 3. Diverging Fleet Bar */}
-              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-6 glass-card p-4 h-[400px] flex flex-col">
-                <div className="flex justify-between items-start w-full mb-2">
-                  <h2 className="text-xl font-display font-semibold text-white">Fleet Graveyard vs Vanguard</h2>
-                  <AISummaryWidget title="Fleet Graveyard vs Vanguard" chartData={null} config={null} />
-                </div>
+              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-4 glass-card p-4 h-[400px] flex flex-col">
+                <h2 className="text-xl font-display font-semibold text-white mb-2">Fleet Graveyard vs Vanguard</h2>
                 <p className="text-sm text-space-400 mb-6">Retired rocket families (Left) vs Currently active fleets (Right)</p>
                 <div className="flex-1 w-full h-[350px]">
                   {loading ? <LoadingPlaceholder /> : (
@@ -889,12 +835,9 @@ export default function App() {
 
 
               {/* 5. Space Ecosystem Flow (Nested Sunburst) */}
-              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-6 glass-card p-4 h-[400px] flex flex-col items-center">
-                <div className="flex justify-between items-start w-full mb-2">
-                  <h2 className="text-xl font-display font-semibold text-white text-left">The Space Ecosystem Hierarchy</h2>
-                  <AISummaryWidget title="The Space Ecosystem Hierarchy" chartData={null} config={null} />
-                </div>
-                <p className="text-sm text-space-400 mb-6 w-full text-left">Interactive flow from State (Inner) → Agency (Middle) → Rocket Family (Outer)</p>
+              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-8 glass-card p-4 h-[400px] flex flex-col items-center">
+                <h2 className="text-xl font-display font-semibold text-white mb-2 w-full text-left">The Space Ecosystem Hierarchy</h2>
+                <p className="text-sm text-space-400 mb-6 w-full text-left">Interactive flow from State (Inner) ΓåÆ Agency (Middle) ΓåÆ Rocket Family (Outer)</p>
                 <div className="flex-1 w-full h-[300px]">
                   {loading ? <LoadingPlaceholder /> : (
                     <ResponsiveContainer width="100%" height="100%">
@@ -916,13 +859,12 @@ export default function App() {
               </motion.div>
 
               {/* 5. Agency DNA Profile */}
-              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-6 glass-card p-4 h-[400px] flex flex-col items-center">
-                <div className="flex justify-between items-start w-full mb-2">
-                  <h2 className="text-xl font-display font-semibold text-white text-left">Agency DNA Profile</h2>
-                  <AISummaryWidget title="Agency DNA Profile" chartData={null} config={null} />
+              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-4 glass-card p-4 h-[400px] flex flex-col items-center justify-center relative">
+                <div className="absolute top-6 left-6 text-left">
+                  <h2 className="text-xl font-display font-semibold text-white mb-2">Agency DNA Profile</h2>
+                  <p className="text-sm text-space-400">Relative strategies of the top 5 global players (normalized to 100%)</p>
                 </div>
-                <p className="text-sm text-space-400 mb-6 w-full text-left">Relative strategies of the top 5 global players (normalized to 100%)</p>
-                <div className="flex-1 w-full h-[300px]">
+                <div className="w-full h-[400px] mt-10">
                   {loading ? <LoadingPlaceholder /> : (
                     <ResponsiveContainer width="100%" height="100%">
                       <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
@@ -943,11 +885,8 @@ export default function App() {
               </motion.div>
 
               {/* 6. Rocket Lifespans (Gantt via Custom BarChart) */}
-              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-6 glass-card p-4 h-[400px] flex flex-col">
-                <div className="flex justify-between items-start w-full mb-2">
-                  <h2 className="text-xl font-display font-semibold text-white">Eras of the Vanguard Fleets</h2>
-                  <AISummaryWidget title="Eras of the Vanguard Fleets" chartData={null} config={null} />
-                </div>
+              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-8 glass-card p-4 h-[400px] flex flex-col">
+                <h2 className="text-xl font-display font-semibold text-white mb-2">Eras of the Vanguard Fleets</h2>
                 <p className="text-sm text-space-400 mb-6">Lifespans of the top 15 most flown orbital rockets in history</p>
                 <div className="flex-1 w-full h-[300px]">
                   {loading ? <LoadingPlaceholder /> : (
@@ -985,11 +924,8 @@ export default function App() {
               </motion.div>
 
               {/* 8. Decades of Dominance (Bump Chart) */}
-              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-6 glass-card p-4 h-[400px] flex flex-col">
-                <div className="flex justify-between items-start w-full mb-2">
-                  <h2 className="text-xl font-display font-semibold text-white">Agency Dominance Rank</h2>
-                  <AISummaryWidget title="Agency Dominance Rank" chartData={null} config={null} />
-                </div>
+              <motion.div variants={itemVariants} className="col-span-1 xl:col-span-4 glass-card p-4 h-[400px] flex flex-col">
+                <h2 className="text-xl font-display font-semibold text-white mb-2">Agency Dominance Rank</h2>
                 <p className="text-sm text-space-400 mb-6">Historical ranking by total launch volume across decades</p>
                 <div className="flex-1 w-full h-[350px]">
                   {loading ? <LoadingPlaceholder /> : (

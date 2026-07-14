@@ -35,7 +35,7 @@ export default function ChartBuilder({ allData, loading, initialConfig, query })
     setIsGeneratingSummary(true);
     setAiSummary(null);
     try {
-      const res = await fetch('http://localhost:8001/api/generate_summary', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/generate_summary`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

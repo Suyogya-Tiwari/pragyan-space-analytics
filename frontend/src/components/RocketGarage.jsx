@@ -92,8 +92,8 @@ export default function RocketGarage({ allData = [] }) {
             onChange={(e) => setRocket1(rocketSpecs.find(r => r.id === e.target.value) || null)}
             className="w-full glass-panel border border-space-600 rounded-lg p-3 text-white focus:outline-none focus:border-agency-nasa mb-4 font-display text-lg"
           >
-            <option value="" disabled>Select Vehicle 1...</option>
-            {rocketSpecs.map(r => <option key={r.id} value={r.id}>{r.name} ({r.agency})</option>)}
+            <option value="" disabled className="bg-slate-900 text-white">Select Vehicle 1...</option>
+            {rocketSpecs.map(r => <option key={r.id} value={r.id} className="bg-slate-900 text-white">{r.name} ({r.agency})</option>)}
           </select>
           <p className="text-sm text-space-300 h-16">{rocket1 ? rocket1.description : "Select a vehicle to load its telemetry and historical data."}</p>
         </div>
@@ -112,8 +112,8 @@ export default function RocketGarage({ allData = [] }) {
             onChange={(e) => setRocket2(rocketSpecs.find(r => r.id === e.target.value) || null)}
             className="w-full glass-panel border border-space-600 rounded-lg p-3 text-white focus:outline-none focus:border-agency-spacex mb-4 font-display text-lg"
           >
-            <option value="" disabled>Select Vehicle 2...</option>
-            {rocketSpecs.map(r => <option key={r.id} value={r.id}>{r.name} ({r.agency})</option>)}
+            <option value="" disabled className="bg-slate-900 text-white">Select Vehicle 2...</option>
+            {rocketSpecs.map(r => <option key={r.id} value={r.id} className="bg-slate-900 text-white">{r.name} ({r.agency})</option>)}
           </select>
           <p className="text-sm text-space-300 h-16 text-right">{rocket2 ? rocket2.description : "Select a second vehicle to compare specifications."}</p>
         </div>

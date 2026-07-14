@@ -17,7 +17,7 @@ export default function DataTable({ agency, startYear, endYear, onRowClick }) {
     const fetchRawData = async () => {
       setLoading(true);
       try {
-        let url = `http://localhost:8001/api/raw_data?page=${page}&limit=${limit}`;
+        let url = `${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/raw_data?page=${page}&limit=${limit}`;
         if (agency) url += `&agency=${agency}`;
         if (startYear) url += `&start_year=${startYear}`;
         if (endYear) url += `&end_year=${endYear}`;
@@ -60,7 +60,7 @@ export default function DataTable({ agency, startYear, endYear, onRowClick }) {
 
   const handleExportCSV = async () => {
     try {
-      let url = `http://localhost:8001/api/raw_data?page=1&limit=100000`;
+      let url = `${import.meta.env.VITE_API_URL || 'http://localhost:8001'}/api/raw_data?page=1&limit=100000`;
       if (agency) url += `&agency=${agency}`;
       if (startYear) url += `&start_year=${startYear}`;
       if (endYear) url += `&end_year=${endYear}`;

@@ -143,7 +143,7 @@ export default function LiveOrbitalMap({ allData = [], onClose }) {
     // Render filtered data points
     allData.forEach((row, idx) => {
       const isSuccess = row.is_success === 1;
-      const agency = row.real_agency || 'Other';
+      const agency = row.dashboard_agency || 'Other';
       
       if (localFilter !== 'All') {
         if (localFilter === 'Debris' && isSuccess) return; // Skip successful missions if filtering for Debris
