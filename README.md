@@ -2,7 +2,7 @@
 
 A high-performance, AI-powered aerospace data dashboard built with a custom neon-glassmorphism UI. It visualizes decades of historical orbital data, renders 3D procedural globes, and integrates live third-party launch APIs.
 
-**[Live Demo Here]** *(Add your Vercel/Netlify link here once deployed!)*
+* **Live Demo:** [pragyan-three.vercel.app](https://pragyan-three.vercel.app)
 
 ## Core Features
 - **AI-Powered Insights:** Integrated with Google Gemini to dynamically summarize and explain complex orbital charts and data trends.
